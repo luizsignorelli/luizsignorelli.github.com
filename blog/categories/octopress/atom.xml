@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Luiz Signorelli Dev Blog]]></title>
-  <link href="http://luizsignorelli.github.com/atom.xml" rel="self"/>
+  <title><![CDATA[Category: octopress | Luiz Signorelli Dev Blog]]></title>
+  <link href="http://luizsignorelli.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://luizsignorelli.github.com/"/>
   <updated>2012-03-28T11:02:34-03:00</updated>
   <id>http://luizsignorelli.github.com/</id>
@@ -62,47 +62,41 @@
 
 <p>Para conferir se as dependências estão instaladas faça:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git --version # deve ser 1.7.x
-</span><span class='line'>ruby -v       # deve ser 1.9.2</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+git --version # deve ser 1.7.x
+ruby -v       # deve ser 1.9.2
+</code></p>
 
 <p>Se tudo estiver funcionando, o próximo passo é clonar o repositório do <strong>Octopress</strong>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git octopress
-</span><span class='line'>cd octopress    # Se você usa o RVM será perguntado se confia no script .rvmrc, responda sim (y)</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+git clone git://github.com/imathis/octopress.git octopress
+cd octopress    # Se você usa o RVM será perguntado se confia no script .rvmrc, responda sim (y)
+</code></p>
 
 <p>O <strong>Octopress</strong> depende de algumas <em>Ruby gems</em>, para instalar essas dependências faça:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem install bundler
-</span><span class='line'>rbenv rehash    # Só se você usa rbenv
-</span><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+gem install bundler
+rbenv rehash    # Só se você usa rbenv
+bundle install
+</code></p>
 
 <p>Agora gere o layout inicial com o tema <em>default</em>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake install</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+rake install
+</code></p>
 
 <h3>Preview local</h3>
 
 <p>Para ver uma prévia do seu blog antes de fazer o <em>deploy</em> no Github faça:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate   # Gera os arquivos estátivos do blog 
-</span><span class='line'>rake preview    # Inicia o servidor e observa qualquer alteração nos fontes</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Acessando no seu browser <code>http://localhost:4000</code>, você deve ver seu blog vazio.</p>
+<p><code>
+rake generate   # Gera os arquivos estátivos do blog
+rake preview    # Inicia o servidor e observa qualquer alteração nos fontes
+</code>
+Acessando no seu browser <code>http://localhost:4000</code>, você deve ver seu blog vazio.</p>
 
 <h3>Deploy com Github Pages</h3>
 
@@ -112,9 +106,9 @@
 
 <p>Existe uma rake task para fazer tudo isso:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+rake setup_github_pages
+</code></p>
 
 <p>Ela vai:</p>
 
@@ -130,23 +124,20 @@
 
 <p>Para gerar o blog:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate
-</span><span class='line'>rake deploy</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+rake generate
+rake deploy
+</code></p>
 
 <p>Os arquivos gerados serão copiados para o diretório <code>_deploy</code>. Eles serão adicionados no git e evniados para seu repositório remoto na branch <em>master</em>. Assim que seu site estiver pronto o Github irá te enviar um email avisando, basta acessar <code>http://&lt;seu_usuario_github&gt;.github.com</code>.</p>
 
 <p>Não se esqueça de sempre commitar os fontes:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git add .
-</span><span class='line'>git commit -m 'commit message'
-</span><span class='line'>git push origin source</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+git add .
+git commit -m 'commit message'
+git push origin source
+</code></p>
 
 <p>É isso. Para mais informações sobre o <strong>Octopress</strong>, como configurar se blog e como escrever posts acesse <a href="http://octopress.org/">http://octopress.org/</a>.</p>
 ]]></content>
