@@ -4,7 +4,7 @@
   <title><![CDATA[Luiz Signorelli Dev Blog]]></title>
   <link href="http://luizsignorelli.github.com/atom.xml" rel="self"/>
   <link href="http://luizsignorelli.github.com/"/>
-  <updated>2012-04-30T15:35:46-03:00</updated>
+  <updated>2012-04-30T15:38:22-03:00</updated>
   <id>http://luizsignorelli.github.com/</id>
   <author>
     <name><![CDATA[Luiz Fernando Signoelli]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Usando uma variável de ambiente para configuração do banco de dados no Rails 3.2]]></title>
+    <link href="http://luizsignorelli.github.com/blog/2012/04/25/usando-uma-variavel-de-ambiente-para-configuracao-do-banco-de-dados-no-rails-3-dot-2/"/>
+    <updated>2012-04-25T07:25:00-03:00</updated>
+    <id>http://luizsignorelli.github.com/blog/2012/04/25/usando-uma-variavel-de-ambiente-para-configuracao-do-banco-de-dados-no-rails-3-dot-2</id>
+    <content type="html"><![CDATA[<p>Já faz algum tempo que vi o <a href="http://heroku.com">Heroku</a> utilizar uma variável de ambiente para fazer a configuração de banco de dados da sua aplicação.
+Eles utilizam uma variável chamada <code>DATABASE_URL</code>, e o conteúdo dessa variável deve ser uma string de conexão com o banco, por exemplo: <code>postgres://username:password@host:port/database_name</code>.</p>
+
+<p>A partir do Rails 3.2, você consegue configurar sua conexão com o banco dessa maneira também. Suponha que seu <code>database.yml</code> está assim:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql2</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">reconnect</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_db_development</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pool</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root_password</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Se você definir a variável de ambiente <code>DATABASE_URL</code> com uma string de conexão válida, o rails vai ignorar o arquivo <code>database.yml</code> e usar a string de conexão definida na variável. Para o exemplo acima, a string equivalente seria: <code>mysql2://root:root_password@localhost:3306/my_db_development</code>.</p>
+
+<p>O principal benefício dessa abordagem é isolar a configuração do banco, assim cada desenvolvedor define a variável <code>DATABASE_URL</code> como preferir. Outra maneira de se atingir isso é ignorar o arquivo <code>database.yml</code> do seu repositório git, assim cada desenvolvedor deve criar o seu com suas configurações locais.</p>
+
+<h2>Como descobri isso da pior maneira possível)</h2>
+
+<p>Há alguns meses eu estava desenvolvendo uma aplicação <strong>Java</strong> usando o <a href="http://www.playframework.org/">Play! Framwork</a> e como o <strong>Play</strong> suporta esse tipo de configuração usando variáveis de ambiente, a equipe resolveu usar para a cofiguração de banco de dados.</p>
+
+<p> A nossa variável também se chamva <code>DATABASE_URL</code>, pois tinhamos visto essa configuração no Heroku e acabamos usando o mesmo nome. Como estavamos usando <code>mysql</code>, a nossa string era mais ou menos assim: <code>mysql://root@localhost:3306/my_database</code>.</p>
+
+<p>Para não precisar ficar definindo essa variável toda hora, adicionei o comando para exportar no meu arquivo <code>.bash_profile</code>. O projeto acabou, mas eu esqueci de remover essa linha do meu <code>.bash_profile</code>, logo a variável ainda estava sendo definida.</p>
+
+<p>Meses depois, o <strong>Rails 3.2</strong> é lançado, e fui criar uma aplicação usando essa nova versão. Toda vez que eu tentava usar a aplicação rails, no console ou subindo o servidor, o seguinte erro era lançado:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">Please install the mysql adapter</span><span class="p-Indicator">:</span> <span class="err">`</span><span class="l-Scalar-Plain">gem install activerecord-mysql-adapter` (mysql is not part of the bundle. Add it to Gemfile.) (LoadError)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Detalhe: minha aplicação rails não usava <code>mysql</code> e sim <code>sqlite3</code>, e mesmo assim ele me dava esse erro pedindo o <code>activerecord-mysql-adapter</code>.</p>
+
+<p>Depois de pesquisar na iternet e tentar resolver o problema, sem sucesso, por uma semana, resolvi debugar o rails para ver o que e diabos ele estava tentando fazer. Foi aí que descobri essa nova <em>feature</em>. O rails estava pegando a configuração do meu projeto <strong>Play</strong>, e por isso o erro. Foi só remover a variavel de ambiente que tudo voltou a funcionar normalmente.</p>
+
+<p>A única menção que encontrei dessa nova <em>feature</em> do rails foi no último parágrafo
+<a href="http://rubypond.com/blog/activerecord-url-connections">desse</a> blog.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Blog com Octopress e GitHub Pages]]></title>
