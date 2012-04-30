@@ -3,7 +3,7 @@ layout: post
 title: "Usando uma variável de ambiente para configuração do banco de dados no Rails 3.2"
 date: 2012-04-25 07:25
 comments: true
-published: false
+published: true
 categories: 
 ---
 
